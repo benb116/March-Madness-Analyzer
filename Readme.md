@@ -2,11 +2,11 @@ BenB116's March Madness Analyzer
 =======
 This is a script I wrote that analyzes the results of each NCAA Men's Basketball Tournament since 1985 (the first year that the tournament was expanded to 64 teams). The script only pays attention to the seed of each team and how far they get in the tournament. From the historical data, which I got using [CBS Sports Year-by-Year History](http://www.cbssports.com/collegebasketball/ncaa-tournament/history/yearbyyear) I came up with averages that can be used to predict future tournaments.
 
-Inside the folder "Raw Data" is the, well, the raw data. There are two text files for each year since 1985: the first, labeled "raw", is a list of the teams that won a game in the tournament. The first 32 lines are from the First Round, the next 16 are from the Second Round, the following 8 are from the Sweet Sixteen, and so on. The second file, labeled "key", is a list of every team in the tournament that year and their seed.
+Inside the folder "Raw Data" is, well, the raw data. There are two text files for each year since 1985: the first, labeled "raw", is a list of the teams that won a game in the tournament. The first 32 lines are from the First Round, the next 16 are from the Second Round, the following 8 are from the Sweet Sixteen, and so on. The second file, labeled "key", is a list of every team in the tournament that year and their seed.
 
 The script works by counting the number of times  teams with a specific seed win in each round of each tournament. The numbers are added and each divided by 28 (the number of tournaments since 1985) to find the average number of wins per seed in each round of a given tournament.
 
-Here are ten facts and tips based on the data:
+###Here are ten facts and tips based on the data:
 
 1. A 16 seed has never beaten a #1 seed.
 2. A #9 seed is slightly more likely to beat an #8 seed than vice versa.
