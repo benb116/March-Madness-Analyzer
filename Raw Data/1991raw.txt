@@ -18,7 +18,7 @@ NorthCarolina
 Villanova
 EasternMichigan
 PennState
-N.CState
+NCState
 OklahomaState
 Temple
 Richmond

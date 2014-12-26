@@ -11,13 +11,13 @@
 14: Richmond
 3: SouthCarolina
 7: Indiana
-10: Oklahoma87
+10: Oklahoma
 2: Connecticut
 15: FairleighDickinson
 1: Arizona
 16: NichollsState
 9: IllinoisState
-8: Tennessee81
+8: Tennessee
 5: Illinois
 12: SouthAlabama
 4: Maryland

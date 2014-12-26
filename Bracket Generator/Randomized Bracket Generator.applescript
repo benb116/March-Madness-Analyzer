@@ -1,8 +1,8 @@
 global thecolumns, therounds
+do shell script "echo New Sim >> ~/Desktop/results.txt"
 
 set thecolumns to {"B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"}
 repeat 10 times
-	delay 1
 	-- Initial weights for seeds by round (see results of historical data for source)
 	set r1 to {120, 113, 102, 95, 76, 79, 73, 59, 61, 47, 41, 44, 25, 18, 7, 0} -- 32
 	set r2 to {104, 77, 61, 55, 39, 40, 20, 11, 5, 22, 17, 20, 6, 2, 1, 0} -- 16
@@ -11,6 +11,19 @@ repeat 10 times
 	set r5 to {27, 12, 9, 3, 3, 2, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0} -- 2
 	set r6 to {18, 4, 4, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0} -- 1
 	set therounds to {r1, r2, r3, r4, r5, r6}
+	
+	repeat with rn from 2 to 6
+		
+		repeat with x from 1 to 16
+			log (item x of (item rn of therounds))
+			try
+				set (item x of (item rn of therounds)) to (item x of (item rn of therounds)) / (item x of (item (rn - 1) of therounds))
+			on error
+				set (item x of (item rn of therounds)) to 0
+			end try
+		end repeat
+		
+	end repeat
 	
 	-- Compute each round. The lists tell the script which rows to use in Excel
 	doround(1, {1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35, 37, 39, 41, 43, 45, 47, 49, 51, 53, 55, 57, 59, 61, 63}, 1)
@@ -27,6 +40,15 @@ repeat 10 times
 		set fourthp to (value of range "F49") as integer
 	end tell
 	do shell script "echo " & firstp & "	" & secondp & "	" & thirdp & "	" & fourthp & " >> ~/Desktop/results.txt"
+	(*
+	set fulltext to (do shell script "cat ~/Desktop/results.txt")
+	set counter to 0
+	repeat with par in paragraphs of fulltext
+		if first character of par = "1" then set counter to counter + 1
+	end repeat
+	log counter / (count of paragraphs in fulltext)
+	*)
+	delay 1
 end repeat
 on doround(rn, lis, plus)
 	tell application "Microsoft Excel"
@@ -44,24 +66,14 @@ on doround(rn, lis, plus)
 			
 			log fcurval
 			log scurval
-			
 			set sumval to fcurval + scurval
-			tell current application
-				set rand to (random number from 0 to sumval) -- Choose a random number between 0 and the sum of the rank weights
-			end tell
+			set rand to (random number from 0 to sumval) -- Choose a random number between 0 and the sum of the rank weights
 			log rand
-			log fcurval
 			
 			if rand is less than or equal to fcurval then -- If the number is less than the sum (which is more likely for a higher seed)
 				set value of range ((item (theround + 1) of thecolumns) & therow) to firstcell -- Advance first cell
-				--set prevsum to get value of range (((item (theround + 7) of thecolumns) & therow)) as number
-				--set value of range (((item (theround + 7) of thecolumns) & therow)) to prevsum + (firstcell as number)
-				set (item thefrank of (item theround of therounds)) to (item thefrank of (item theround of therounds)) - 29 -- Reduce the rank weight
 			else if rand > fcurval then
 				set value of range ((item (theround + 1) of thecolumns) & therow) to secondcell -- Advance second cell
-				--set prevsum to get value of range (((item (theround + 7) of thecolumns) & therow)) as number
-				--set value of range (((item (theround + 7) of thecolumns) & therow)) to prevsum + (secondcell as number)
-				set (item thesrank of (item theround of therounds)) to (item thesrank of (item theround of therounds)) - 29 -- Reduce the rank weight
 			end if
 			delay 0.1
 		end repeat

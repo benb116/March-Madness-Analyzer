@@ -31,6 +31,7 @@
 15: Hampton
 2: IowaState
 1: MichiganState
+16: AlabamaState
 9: FresnoState
 8: California
 12: Gonzaga

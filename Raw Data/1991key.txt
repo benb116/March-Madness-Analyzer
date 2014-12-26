@@ -38,7 +38,7 @@
 5: MississippiState
 13: PennState
 4: UCLA
-6: N.CState
+6: NCState
 11: SouthernMississippi
 3: OklahomaState
 14: NewMexico

@@ -17,9 +17,9 @@
 1: Duke
 16: Lamar
 8: Kansas
-9: DePaul77
+9: DePaul
 5: Florida
-12: Butler68
+12: Butler
 4: Illinois
 13: Pennsylvania
 11: Pepperdine
@@ -27,7 +27,7 @@
 3: OklahomaState
 14: Hofstra
 10: SetonHall
-7: Oregon71
+7: Oregon
 2: Temple
 15: Lafayette
 1: Arizona
@@ -51,7 +51,7 @@
 8: Utah
 9: SaintLouis
 5: Kentucky
-12: StateBonaventure80
+12: StateBonaventure
 4: Syracuse
 13: Samford
 6: UCLA
