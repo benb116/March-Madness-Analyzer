@@ -7,7 +7,7 @@ set r3 to {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 set r4 to {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 set r5 to {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 set r6 to {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-repeat with yr from 1985 to 2014
+repeat with yr from 1985 to 2015
 	delay 0.1
 	log ("Analyzing " & (yr as text) & "...") as string
 	set fulltext to (do shell script "cat " & fldr & (yr as text) & "raw.txt")

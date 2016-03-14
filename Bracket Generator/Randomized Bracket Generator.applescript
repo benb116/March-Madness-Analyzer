@@ -1,30 +1,31 @@
 global thecolumns, therounds
-do shell script "echo New Sim >> ~/Desktop/results.txt"
 
-set thecolumns to {"B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"}
-repeat 10 times
-	-- Initial weights for seeds by round (see results of historical data for source)
-	set r1 to {120, 113, 102, 95, 76, 79, 73, 59, 61, 47, 41, 44, 25, 18, 7, 0} -- 32
-	set r2 to {104, 77, 61, 55, 39, 40, 20, 11, 5, 22, 17, 20, 6, 2, 1, 0} -- 16
-	set r3 to {82, 56, 30, 19, 8, 13, 8, 8, 2, 7, 6, 1, 0, 0, 0, 0} -- 8
-	set r4 to {48, 26, 14, 13, 6, 3, 1, 5, 1, 0, 3, 0, 0, 0, 0, 0} -- 4
-	set r5 to {27, 12, 9, 3, 3, 2, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0} -- 2
-	set r6 to {18, 4, 4, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0} -- 1
-	set therounds to {r1, r2, r3, r4, r5, r6}
-	
-	repeat with rn from 2 to 6
-		
-		repeat with x from 1 to 16
-			log (item x of (item rn of therounds))
-			try
-				set (item x of (item rn of therounds)) to (item x of (item rn of therounds)) / (item x of (item (rn - 1) of therounds))
-			on error
-				set (item x of (item rn of therounds)) to 0
-			end try
-		end repeat
-		
-	end repeat
-	
+set thecolumns to {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O"}
+-- Initial weights for seeds by round (see results of historical data for source)
+set r1 to {124, 117, 104, 99, 80, 81, 76, 63, 61, 48, 43, 44, 25, 20, 7, 0}
+set r2 to {107, 79, 63, 57, 41, 41, 22, 12, 5, 22, 18, 20, 6, 2, 1, 0}
+set r3 to {85, 58, 31, 20, 8, 13, 9, 8, 2, 7, 6, 1, 0, 0, 0, 0}
+set r4 to {51, 26, 14, 13, 6, 3, 2, 5, 1, 0, 3, 0, 0, 0, 0, 0}
+set r5 to {29, 12, 9, 3, 3, 2, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0}
+set r6 to {19, 4, 4, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0}
+set oldrounds to {r1, r2, r3, r4, r5, r6}
+set therounds to {r1, r2, r3, r4, r5, r6}
+
+(*
+RECOMMENDATIONS for a completely average bracket
+
+First Round - Pick eight upsets:
+	Two 9 over 8, two 10 over 7, two/one 11 over 6, one/two 12 over 5 , one 13 over 4
+Second Round - 
+	Knock out at least one 2, two 3, two 4, two 5. Finish accordingly
+Sweet Sixteen - 
+	At this point, only the low number seeds that are actually good are left. 
+	Still, knock out one 1, one 3, one/two 4
+Elite Eight - 
+	One more 1 should fall, leaving only two remaining. You should reach the Final Four with 1, 1, 2, and a 3, 4, or maybe 5.
+*)
+
+repeat 1 times
 	-- Compute each round. The lists tell the script which rows to use in Excel
 	doround(1, {1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35, 37, 39, 41, 43, 45, 47, 49, 51, 53, 55, 57, 59, 61, 63}, 1)
 	doround(2, {1, 5, 9, 13, 17, 21, 25, 29, 33, 37, 41, 45, 49, 53, 57, 61}, 2)
@@ -33,21 +34,14 @@ repeat 10 times
 	doround(5, {1, 33}, 16)
 	doround(6, {1}, 32)
 	
-	tell application "Microsoft Excel"
+	(*tell application "Microsoft Excel"
 		set firstp to (value of range "F1") as integer
 		set secondp to (value of range "F17") as integer
 		set thirdp to (value of range "F33") as integer
 		set fourthp to (value of range "F49") as integer
-	end tell
-	do shell script "echo " & firstp & "	" & secondp & "	" & thirdp & "	" & fourthp & " >> ~/Desktop/results.txt"
-	(*
-	set fulltext to (do shell script "cat ~/Desktop/results.txt")
-	set counter to 0
-	repeat with par in paragraphs of fulltext
-		if first character of par = "1" then set counter to counter + 1
-	end repeat
-	log counter / (count of paragraphs in fulltext)
-	*)
+		set winner to (value of range "H1") as integer
+	end tell*)
+	
 	delay 1
 end repeat
 on doround(rn, lis, plus)
@@ -64,17 +58,41 @@ on doround(rn, lis, plus)
 			set thesrank to secondcell as integer
 			set scurval to (item thesrank of (item theround of therounds))
 			
+			set sumval to fcurval + scurval
+			tell current application
+				--set rand to (random number from 0 to sumval) -- Choose a random number between 0 and the sum of the rank weights
+			end tell
 			log fcurval
 			log scurval
-			set sumval to fcurval + scurval
-			set rand to (random number from 0 to sumval) -- Choose a random number between 0 and the sum of the rank weights
-			log rand
-			
-			if rand is less than or equal to fcurval then -- If the number is less than the sum (which is more likely for a higher seed)
-				set value of range ((item (theround + 1) of thecolumns) & therow) to firstcell -- Advance first cell
-			else if rand > fcurval then
-				set value of range ((item (theround + 1) of thecolumns) & therow) to secondcell -- Advance second cell
-			end if
+			--(*
+			set winner to 0
+			repeat while winner = 0
+				tell current application
+					set rand1 to (random number from 0 to 124)
+					set rand2 to (random number from 0 to 124)
+				end tell
+				if (rand1 ² fcurval) and (rand2 > scurval) then
+					set winner to 1
+				else if (rand1 > fcurval) and (rand2 ² scurval) then
+					set winner to 2
+				else if (fcurval = scurval) then
+					set winner to 1
+				end if
+			end repeat
+			--*)
+			tell application "Microsoft Excel"
+				--if rand is less than or equal to fcurval then -- If the number is less than the sum (which is more likely for a higher seed)
+				if winner = 1 then
+					set value of range ((item (theround + 1) of thecolumns) & therow) to firstcell -- Advance first cell
+					--set oldsum to (get value of range ((item (theround + 9) of thecolumns) & therow))
+					--set value of range ((item (theround + 9) of thecolumns) & therow) to (oldsum + firstcell)
+					--else if rand > fcurval then
+				else if winner = 2 then
+					set value of range ((item (theround + 1) of thecolumns) & therow) to secondcell -- Advance second cell
+					--set oldsum to (get value of range ((item (theround + 9) of thecolumns) & therow))
+					--set value of range ((item (theround + 9) of thecolumns) & therow) to (oldsum + secondcell)
+				end if
+			end tell
 			delay 0.1
 		end repeat
 	end tell
