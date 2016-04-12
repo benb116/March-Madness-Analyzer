@@ -3,7 +3,7 @@ var seedKey = {};
 var sumVals = {};
 var totalVals = blankArray();
 var startYear = 1985;
-var endYear = 2015;
+var endYear = 2016;
 
 function blankArray() {
 	return [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];
@@ -59,7 +59,7 @@ for (var year = startYear; year <= endYear; year++) {
 console.log(totalVals);
 var outOf4 = totalVals.map(function(round) {
 	return round.map(function(num) {
-		return Math.round(num * 4 * 100 / 124) / 100;
+		return Math.round(num * 100 / ((endYear - startYear + 1) * 4)) / 100;
 	});
 });
 console.log(outOf4)
