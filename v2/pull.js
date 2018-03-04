@@ -47,12 +47,12 @@ for (var year = startYear; year <= endYear; year++) {
 		};
 	}
 }
-// console.log(sumVals)
+console.log(sumVals)
 for (var year = startYear; year <= endYear; year++) {
 	var thisSumVal = sumVals[year];
 	for (var round in thisSumVal) {
 		for (var seed in thisSumVal[round]) {
-			totalVals[round][seed] += thisSumVal[round][seed];
+			totalVals[round][seed] += (thisSumVal[round][seed] || 0);
 		}
 	}
 }

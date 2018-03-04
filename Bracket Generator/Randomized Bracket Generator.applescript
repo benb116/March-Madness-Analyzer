@@ -2,12 +2,12 @@ global thecolumns, therounds
 
 set thecolumns to {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O"}
 -- Initial weights for seeds by round (see results of historical data for source)
-set r1 to {124, 117, 104, 99, 80, 81, 76, 63, 61, 48, 43, 44, 25, 20, 7, 0}
-set r2 to {107, 79, 63, 57, 41, 41, 22, 12, 5, 22, 18, 20, 6, 2, 1, 0}
-set r3 to {85, 58, 31, 20, 8, 13, 9, 8, 2, 7, 6, 1, 0, 0, 0, 0}
-set r4 to {51, 26, 14, 13, 6, 3, 2, 5, 1, 0, 3, 0, 0, 0, 0, 0}
-set r5 to {29, 12, 9, 3, 3, 2, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0}
-set r6 to {19, 4, 4, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0}
+set r1 to {132, 124, 111, 106, 85, 82, 81, 67, 65, 51, 50, 47, 26, 21, 8, 0}
+set r2 to {114, 83, 68, 62, 43, 42, 26, 13, 5, 23, 20, 20, 6, 2, 1, 0}
+set r3 to {92, 61, 32, 21, 8, 14, 10, 8, 2, 8, 7, 1, 0, 0, 0, 0}
+set r4 to {54, 28, 15, 13, 6, 3, 3, 5, 1, 1, 3, 0, 0, 0, 0, 0}
+set r5 to {32, 13, 9, 3, 3, 2, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0}
+set r6 to {20, 5, 4, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0}
 set oldrounds to {r1, r2, r3, r4, r5, r6}
 set therounds to {r1, r2, r3, r4, r5, r6}
 
@@ -66,8 +66,10 @@ on doround(rn, lis, plus)
 			log scurval
 			--(*
 			set winner to 0
+			
 			repeat while winner = 0
 				tell current application
+					set rand to (random number from 0 to sumval)
 					set rand1 to (random number from 0 to 124)
 					set rand2 to (random number from 0 to 124)
 				end tell
@@ -81,16 +83,16 @@ on doround(rn, lis, plus)
 			end repeat
 			--*)
 			tell application "Microsoft Excel"
-				--if rand is less than or equal to fcurval then -- If the number is less than the sum (which is more likely for a higher seed)
-				if winner = 1 then
+				if rand is less than or equal to fcurval then -- If the number is less than the sum (which is more likely for a higher seed)
+					--if winner = 1 then
 					set value of range ((item (theround + 1) of thecolumns) & therow) to firstcell -- Advance first cell
-					--set oldsum to (get value of range ((item (theround + 9) of thecolumns) & therow))
-					--set value of range ((item (theround + 9) of thecolumns) & therow) to (oldsum + firstcell)
-					--else if rand > fcurval then
-				else if winner = 2 then
+					set oldsum to (get value of range ((item (theround + 9) of thecolumns) & therow))
+					set value of range ((item (theround + 9) of thecolumns) & therow) to (oldsum + firstcell)
+				else if rand > fcurval then
+					--else if winner = 2 then
 					set value of range ((item (theround + 1) of thecolumns) & therow) to secondcell -- Advance second cell
-					--set oldsum to (get value of range ((item (theround + 9) of thecolumns) & therow))
-					--set value of range ((item (theround + 9) of thecolumns) & therow) to (oldsum + secondcell)
+					set oldsum to (get value of range ((item (theround + 9) of thecolumns) & therow))
+					set value of range ((item (theround + 9) of thecolumns) & therow) to (oldsum + secondcell)
 				end if
 			end tell
 			delay 0.1

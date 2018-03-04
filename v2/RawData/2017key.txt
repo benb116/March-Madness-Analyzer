@@ -26,7 +26,7 @@
 9: VirginiaTech
 12: MiddleTennessee
 5: Minnesota
-8: Northwest
+8: Northwestern
 9: Vanderbilt
 11: Xavier
 6: Maryland
