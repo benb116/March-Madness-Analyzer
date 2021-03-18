@@ -24,14 +24,20 @@
 <script type="text/javascript">
 	var firstroundseeds = [1, 16, 8, 9, 5, 12, 4, 13, 6, 11, 3, 14, 7, 10, 2, 15];
 
-	var weights = [ 
-		[ 132, 124, 111, 106, 85, 82, 81, 67, 65, 51, 50, 47, 26, 21, 8, 0 ],
-		[ 114, 83, 68, 62, 43, 42, 26, 13, 5, 23, 20, 20, 6, 2, 1, 0 ],
-		[ 92, 61, 32, 21, 8, 14, 10, 8, 2, 8, 7, 1, 0, 0, 0, 0 ],
-		[ 54, 28, 15, 13, 6, 3, 3, 5, 1, 1, 3, 0, 0, 0, 0, 0 ],
-		[ 32, 13, 9, 3, 3, 2, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0 ],
-		[ 20, 5, 4, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 ] 
+	var weights = [
+		[139, 132, 119, 111, 90, 87, 85,  68,  72,  55, 53, 50, 29,  21,   8,   1],
+		[120, 89, 74, 65, 47, 42, 28, 13,  7, 23, 22, 21,  6,  2,  1,  0],
+		[97, 64, 36, 21, 9, 14,10,  8,  4,  8, 8,  1, 0,  0,  0,  0],
+		[57, 29, 17, 13, 7, 3, 3,  5,  1,  1, 4, 0, 0,  0,  0,  0],
+		[34, 13, 11, 3, 3, 2, 1,  3,  0, 0, 0, 0, 0,  0,  0, 0],
+		[22, 5, 4, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]
 	];
+
+	var p = weights.map(function (r) {
+		return r.map(function(s) {
+			return s/weights[0][0];
+		});
+	});
 
 	var theTable = document.getElementById('mainTable1');
 	for (var r = 1; r < 65; r++) {
@@ -43,7 +49,7 @@
 		cell.classList.add('s'+firstroundseeds[((r-1) % 16)]);
 
 		for (var k = 1; k <= 6; k++) {
-			if (r % (2**k)  === 1) {cell = row.insertCell(k); cell.rowSpan = (2**k) }
+			if (r % Math.pow(2,k)  === 1) {cell = row.insertCell(k); cell.rowSpan = Math.pow(2,k); }
 		}
 	}
 	doRound(1);
@@ -54,22 +60,39 @@
 	doRound(6);
 	function doRound(n) {
 		for (var r = 1; r < 65; r++) {
-			if (r % (2**n) === 1) {
+			if (r % Math.pow(2,n) === 1) {
 				var t1 = theTable.rows[r].cells[(n-1)].classList[0].substr(1);
-				var t2 = theTable.rows[r+2**(n-1)].cells[(n-1)].classList[0].substr(1);
+				var t2 = theTable.rows[r+Math.pow(2,(n-1))].cells[(n-1)].classList[0].substr(1);
 				var s1 = theTable.rows[r].cells[(n-1)].classList[1].substr(1);
-				var s2 = theTable.rows[r+2**(n-1)].cells[(n-1)].classList[1].substr(1);
-				var w1 = weights[n-1][s1-1];
-				var w2 = weights[n-1][s2-1];
-				var wsum = w1 + w2;
-				var pick = Math.random() * wsum;
-				if (pick < w1) {
-					theTable.rows[r].cells[n].classList.add('t'+t1,'s'+s1)
-					theTable.rows[r].cells[n].innerHTML = s1
-				} else {
-					theTable.rows[r].cells[n].classList.add('t'+t2,'s'+s2)
-					theTable.rows[r].cells[n].innerHTML = s2;
+				var s2 = theTable.rows[r+Math.pow(2,(n-1))].cells[(n-1)].classList[1].substr(1);
+				// var w1 = weights[n-1][s1-1];
+				// var w2 = weights[n-1][s2-1];
+				var w1 = p[n-1][s1-1];
+				var w2 = p[n-1][s2-1];
+				// var wsum = w1 + w2;
+				// var pick = Math.random() * wsum;
+				// if (pick < w1) {
+				// 	theTable.rows[r].cells[n].classList.add('t'+t1,'s'+s1);
+				// 	theTable.rows[r].cells[n].innerHTML = s1;
+				// } else {
+				// 	theTable.rows[r].cells[n].classList.add('t'+t2,'s'+s2);
+				// 	theTable.rows[r].cells[n].innerHTML = s2;
+				// }
+				var picked = 0;
+				while (!picked) {
+					var rand1 = Math.random();
+					var rand2 = Math.random();
+					if (rand1 < w1 && rand2 > w2){
+						theTable.rows[r].cells[n].classList.add('t'+t1,'s'+s1);
+						theTable.rows[r].cells[n].innerHTML = s1;
+						picked = 1;
+					} else if (rand1 > w1 && rand2 < w2) {
+						theTable.rows[r].cells[n].classList.add('t'+t2,'s'+s2);
+						theTable.rows[r].cells[n].innerHTML = s2;
+						picked = 1;
+					}
 				}
+
 			}
 		}
 	}

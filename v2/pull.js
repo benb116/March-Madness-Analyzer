@@ -3,7 +3,7 @@ var seedKey = {};
 var sumVals = {};
 var totalVals = blankArray();
 var startYear = 1985;
-var endYear = 2017;
+var endYear = 2019;
 
 function blankArray() {
 	return [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];
@@ -27,7 +27,9 @@ for (var year = startYear; year <= endYear; year++) {
 	// console.log(data)
 	for (var line in data) {
 		if (data[line]) {
+			// console.log(data[line]);
 			var seed = seedKey[year][data[line]];
+			// console.log(seed);
 			var round;
 			if (line < 32) {
 				round = 1;
@@ -42,24 +44,26 @@ for (var year = startYear; year <= endYear; year++) {
 			} else if (line < 63) {
 				round = 6;
 			}
-			// console.log(data[line]+ ' ' +seed)
 			++sumVals[year][round-1][seed-1];
-		};
+		}
 	}
 }
-console.log(sumVals)
+// console.log(sumVals);
 for (var year = startYear; year <= endYear; year++) {
 	var thisSumVal = sumVals[year];
 	for (var round in thisSumVal) {
 		for (var seed in thisSumVal[round]) {
+			// console.log(year, round, seed);
+			// console.log(thisSumVal[round][seed]);
 			totalVals[round][seed] += (thisSumVal[round][seed] || 0);
+			// console.log(totalVals);
 		}
 	}
 }
 console.log(totalVals);
 var outOf4 = totalVals.map(function(round) {
 	return round.map(function(num) {
-		return Math.round(num * 10 / ((endYear - startYear + 1) * 4)) / 2.5;
+		return Math.round(num * 100 / ((endYear - startYear + 1) * 4)) / 25;
 	});
 });
 // console.log(outOf4)
